@@ -1,0 +1,163 @@
+<script type="text/javascript">
+
+  RED.nodes.registerType('count',{
+      category: 'Shopify',
+      color: '#66b51b',
+      defaults: {
+        name: {value: ''},
+        object: {},
+        countParams: {value: 'params={};'},
+        foreignKeys: {value: 'foreignKeys'},
+        objectWithoutParams: {value: [
+          'accessScope',
+          'balance',
+          'carrierService',
+          'currency',
+          'discountCode',
+          'giftCardAdjustment',
+          'location',
+          'orderRisk',
+          'productResourceFeedback',
+          'resourceFeedback',
+          'storefrontAccessToken',
+          'storefrontAccessToken',
+        ]},
+        objectWithForeignKeys: {value: [
+          {name: 'article', params: ['blogId']},
+          {name: 'asset', params: ['themeId']},
+          {name: 'customerAddress', params: ['customerId']},
+          {name: 'discountCode', params: ['priceRuleId']},
+          {name: 'fulfillment', params: ['orderId']},
+          {name: 'giftCardAdjustment', params: ['giftCardId']},
+          {name: 'orderRisk', params: ['orderId']},
+          {name: 'productImage', params: ['productId']},
+          {name: 'productResourceFeedback', params: ['productId']},
+          {name: 'productVariant', params: ['productId']},
+          {name: 'province', params: ['countryId']},
+          {name: 'refund', params: ['orderId']},
+          {name: 'transaction', params: ['orderId']},
+          {name: 'usageCharge', params: ['recurringApplicationChargeId']},
+        ]}
+      },
+      inputs:1,
+      outputs:2,
+      icon: 'font-awesome/fa-list-ol',
+      label: function() {
+          return this.name || this.object;
+      },
+      oneditprepare: function() {
+        console.log(this.objectWithoutParams);
+        console.log('====')
+
+        this.editor = RED.editor.createEditor({
+          id: 'node-input-editor',
+          mode: 'ace/mode/javascript',
+          value: this.countParams
+        });
+
+       
+
+        $("#node-input-foreignKeys").typedInput({
+          type:'msg',
+          types:['msg'],
+          typeField: '#node-input-foreignKeys-type',
+          value: 'foreignKeys'
+        });
+
+        let self = this;
+        
+        jQuery("#node-input-object").change(function() {
+          const valueSelected = jQuery(this).val();
+          // remove if not have params// remove if not have params
+          if (self.objectWithoutParams.includes(valueSelected)) {
+            console.log('hide')
+            jQuery('#content-params').hide();   
+          } else {
+            console.log('show')
+            jQuery('#content-params').show(); 
+          }
+
+          // add specific params
+          const foreignKeys = self.objectWithForeignKeys.find((el) => el.name === valueSelected);
+          if (foreignKeys) {
+            jQuery('#foreignKeys').show();  
+            jQuery('#foreignKeys-label').html(`<i class="fa fa-tag"></i> ${foreignKeys.params[0]}`);
+          } else {
+            jQuery('#foreignKeys').hide();  
+          }
+        });
+        
+
+      },
+      oneditsave: function() {
+        this.countParams = this.editor.getValue();
+        this.editor.destroy();
+        delete this.editor;
+      },
+      oneditcancel: function() {
+        this.editor.destroy();
+        delete this.editor;
+      }
+  });
+
+  
+
+</script>
+
+<script type="text/html" data-template-name="count">
+  <div class="form-row">
+      <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+      <input type="text" id="node-input-name" placeholder="Name">
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-type"><i class="fa fa-tag"></i> Type</label>
+    <select name="node-input-object" id="node-input-object">
+
+      <option value="article">Article</option>
+      <option value="blog">Blog</option>
+      <option value="checkout">Checkout</option>
+      <option value="collect">Collect</option>
+      <option value="comment">Comment</option>
+      <option value="country">Country</option>
+      <option value="customCollection">Custom Collection</option>
+      <option value="customer">Customer</option>
+      <option value="customerSavedSearch">Customer Saved Search </option>
+      <option value="draftOrder">Draft Order </option>
+      <option value="event">Event </option>
+      <option value="fulfillment">Fulfillment </option>
+      <option value="giftCard">GiftCard </option>
+      <option value="location">Location </option>
+      <option value="marketingEvent">MarketingEvent </option>
+      <option value="metafield">Metafield</option>
+      <option value="order">Order </option>
+      <option value="page">Page </option>
+      <option value="payment">Payment </option>
+      <option value="product">Product </option>
+      <option value="productImage">Product Image </option>
+      <option value="productListing">Product Listing </option>
+      <option value="productVariant">Product Variant </option>
+      <option value="province">Province </option>
+      <option value="redirect">Redirect </option>
+      <option value="scriptTag">Script Tag </option>
+      <option value="smartCollection">Smart Collection </option>
+      <option value="transaction">Transaction </option>
+      <option value="webhook">Webhook </option>
+    </select>
+  </div>
+
+  <div class="form-row" id="foreignKeys">
+    <label for="node-input-type" id="foreignKeys-label"><i class="fa fa-key"></i> Foreign Keys</label>
+    <input type="text" id="node-input-foreignKeys">
+    <input type="hidden" id="node-input-foreignKeys-type">
+  </div>
+
+  <div class="form-row" id="content-params">
+    <label for="node-input-editor"><i class="fa fa-filter"></i> Count params</label>
+    <div style="height: 250px; min-height:150px;" class="node-text-editor" id="node-input-editor"></div>
+  </div>
+</script>
+
+<script type="text/html" data-help-name="count">
+  <p>Count Shopify</p>
+</script>

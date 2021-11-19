@@ -1,0 +1,44 @@
+<script type="text/javascript">
+  RED.nodes.registerType('authenticate',{
+      category: 'Shopify',
+      color: '#66b51b',
+      defaults: {
+          name: {value: ''},
+          shopName: {value: ''}
+      },
+      credentials: {
+        apiKey: {type:"password"},
+        password: {type:"password"}
+      },
+      inputs:1,
+      outputs:2,
+      outputLabels: ['output','error'],
+      icon: 'font-awesome/fa-lock',
+      label: function() {
+          return this.name||"Shopify authenticate";
+      }
+  });
+</script>
+
+<script type="text/html" data-template-name="authenticate">
+  <div class="form-row">
+      <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+      <input type="text" id="node-input-name" placeholder="Name">
+  </div>
+  <div class="form-row">
+    <label for="node-input-shopName"><i class="fa fa-tag"></i> shopName</label>
+    <input type="text" id="node-input-shopName" placeholder="shopName">
+  </div>
+  <div class="form-row">
+    <label for="node-input-apiKey"><i class="fa fa-lock"></i> apiKey</label>
+    <input type="password" id="node-input-apiKey" placeholder="apiKey">
+  </div>
+  <div class="form-row">
+    <label for="node-input-password"><i class="fa fa-lock"></i> password</label>
+    <input type="password" id="node-input-password" placeholder="password">
+  </div>
+</script>
+
+<script type="text/html" data-help-name="authenticate">
+  <p>Authenticate Shopify</p>
+</script>

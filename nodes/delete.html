@@ -1,0 +1,220 @@
+<script type="text/javascript">
+    RED.nodes.registerType('delete',{
+        category: 'Shopify',
+        color: '#66b51b',
+        defaults: {
+            objectId: {value: 'objectId'},
+            deleteParams: {value: 'deleteParams'},
+            object: {},
+            objectWithoutId: {value: [
+              'apiPermission',
+              'inventoryLevel'
+            ]},
+            objectWithoutParams: {value: [
+              'apiPermission',
+              'article',
+              'blog',
+              'carrierService',
+              'collect',
+              'country',
+              'customCollection',
+              'customer',
+              'customerAddress',
+              'customerSavedSearch',
+              'discountCode',
+              'draftOrder',
+              'fulfillmentEvent',
+              'fulfillmentService',
+              'marketingEvent',
+              'metafield',
+              'order',
+              'orderRisk',
+              'page',
+              'priceRule',
+              'product',
+              'productImage',
+              'productListing',
+              'productVariant',
+              'recurringApplicationCharge',
+              'redirect',
+              'report',
+              'scriptTag',
+              'smartCollection',
+              'storefrontAccessToken',
+              'theme',
+              'webhook'
+            ]},
+            objectWithForeignKeys: {value: [
+              {name: 'article', params: ['blogId']},
+              {name: 'asset', params: ['themeId']},
+              {name: 'customerAddress', params: ['customerId']},
+              {name: 'discountCode', params: ['priceRuleId']},
+              {name: 'discountCodeCreationJob', params: ['priceRuleId']},
+              {name: 'fulfillmentEvent', params: ['orderId', 'fulfillmentId']},
+              {name: 'orderRisk', params: ['orderId']},
+              {name: 'productImage', params: ['productId']},
+              {name: 'productListing', params: ['productId']},
+              {name: 'productVariant', params: ['productId']},
+            ]}
+        },
+        inputs:1,
+        outputs:2,
+        icon: "font-awesome/fa-trash",
+        label: function() {
+            return this.name || this.object;
+        },
+        oneditprepare: function() {
+          $("#node-input-objectId").typedInput({
+            type:'msg',
+            types:['msg'],
+            typeField: '#node-input-objectId-type',
+            value: 'objectId'
+          });
+
+          $("#node-input-deleteParams").typedInput({
+            type:'msg',
+            types:['msg'],
+            typeField: '#node-input-deleteParams-type',
+            value: 'deleteParams'
+          });
+
+
+          const self = this;
+          
+          jQuery("#node-input-object").change(function() {
+            const valueSelected = jQuery(this).val();
+            // remove if not have params// remove if not have params
+            if (self.objectWithoutParams.includes(valueSelected)) {
+              console.log('hide')
+              jQuery('#content-params').hide();   
+            } else {
+              console.log('show')
+              jQuery('#content-params').show(); 
+            }
+    
+            // add specific params
+            const foreignKeys = self.objectWithForeignKeys.find((el) => el.name === valueSelected);
+            if (foreignKeys) {
+              jQuery('#foreignKeys').show();  
+              jQuery('#foreignKeys-label').html(`<i class="fa fa-key"></i> ${foreignKeys.params[0]}`);
+              jQuery('#foreignKeys p').text(`If is more one key use array: ${foreignKeys.params.join(',')}`);
+            } else {
+              jQuery('#foreignKeys').hide();  
+            }
+          });
+      }
+    });
+  
+  
+  </script>
+  
+  <script type="text/html" data-template-name="delete">
+    <div class="form-row">
+      <label for="node-input-type"><i class="fa fa-tag"></i> Type</label>
+      <select name="node-input-object" id="node-input-object">
+        <option value="apiPermission">Api Permission</option>
+        <option value="article">Article</option>
+        <option value="asset">Asset</option>
+        <option value="blog">Blog</option>
+        <option value="carrierService">Carrier Service</option>
+        <option value="collect">Collect</option>
+        <option value="country">Country</option>
+        <option value="customCollection">Custom Collection</option>
+        <option value="customer">Customer</option>
+        <option value="customerAddress">Customer Address</option>
+        <option value="customerSavedSearch">Customer Saved Search</option>
+        <option value="discountCode">Discount Code</option>
+        <option value="draftOrder">Draft Order</option>
+        <option value="fulfillmentEvent">Fulfillment Event</option>
+        <option value="fulfillmentService">Fulfillment Service</option>
+        <option value="inventoryLevel">Inventory Level</option>
+        <option value="marketingEvent">Marketing Event</option>
+        <option value="metafield">Metafield</option>
+        <option value="order">order</option>
+        <option value="orderRisk">Order Risk</option>
+        <option value="page">Page</option>
+        <option value="priceRule">Price Rule</option>
+        <option value="product">Product</option>
+        <option value="productImage">Product Image</option>
+        <option value="productListing">Product Listing</option>
+        <option value="productVariant">Product Variant</option>
+        <option value="recurringApplicationCharge">Recurring Application Charge</option>
+        <option value="redirect">Redirect</option>
+        <option value="report">Report</option>
+        <option value="scriptTag">Script Tag</option>
+        <option value="smartCollection">Smart Collection</option>
+        <option value="storefrontAccessToken">Storefront Access Token</option>
+        <option value="theme">Theme</option>
+        <option value="webhook">Webhook</option>
+      </select>
+    </div>
+
+    <div class="form-row">
+      <label for="node-input-type"><i class="fa fa-comment"></i> Object id</label>
+      <input type="text" id="node-input-objectId">
+      <input type="hidden" id="node-input-objectId-type">
+    </div>
+
+    <div class="form-row" id="foreignKeys">
+      <label for="node-input-type" id="foreignKeys-label"><i class="fa fa-key"></i> Foreign Keys</label>
+      <input type="text" id="node-input-foreignKeys">
+      <input type="hidden" id="node-input-foreignKeys-type">
+      <p></p>
+    </div>
+
+    <div class="form-row" id="content-params">
+      <label for="node-input-editor"><i class="fa fa-filter"></i> Delete params</label>
+      <input type="text" id="node-input-deleteParams">
+      <input type="hidden" id="node-input-deleteParams-type">
+    </div>
+  
+  </script>
+  
+<!-- Documentation -->
+<script type="text/html" data-help-name="delete">
+  <p>Shopify Delete action</p>
+  
+  <h3>Inputs</h3>
+      <dl class="message-properties">
+          <dt>objectId
+              <span class="property-type">number | string</span>
+          </dt>
+          <dd> the primary key of the object </dd>
+         <dt class="optional">foreignKeys <span class="property-type">string[]</span></dt>
+          <dd> the foreign keys of the selected object .</dd>
+      </dl>
+  
+   <h3>Outputs</h3>
+       <ol class="node-ports">
+           <li>Standard output
+               <dl class="message-properties">
+                   <dt>payload <span class="property-type">string</span></dt>
+                   <dd>the standard output of the command.</dd>
+               </dl>
+           </li>
+           <li>Standard error
+               <dl class="message-properties">
+                   <dt>payload <span class="property-type">string</span></dt>
+                   <dd>the standard error of the command.</dd>
+               </dl>
+           </li>
+       </ol>
+  
+  <h3>Details</h3>
+      <p>this node is used for delete the object from shopify.
+        Show the examples for understand how to use it.
+      </p>
+      <!-- <p><code>msg.payload</code> is used as the payload of the published message.
+      If it contains an Object it will be converted to a JSON string before being sent.
+      If it contains a binary Buffer the message will be published as-is.</p>
+      <p>The topic used can be configured in the node or, if left blank, can be set
+      by <code>msg.topic</code>.</p>
+      <p>Likewise the QoS and retain values can be configured in the node or, if left
+      blank, set by <code>msg.qos</code> and <code>msg.retain</code> respectively.</p> -->
+  
+  <h3>References</h3>
+      <ul>
+          <li><a href="https://shopify.dev/api/admin-rest" target="_black">Shopify API docs</a> - for more details </li>
+          <li><a>GitHub</a> - the nodes github repository</li>
+      </ul>
+</script>

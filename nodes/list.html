@@ -1,0 +1,240 @@
+<script type="text/javascript">
+
+  RED.nodes.registerType('list',{
+      category: 'Shopify',
+      color: '#66b51b',
+      defaults: {
+        name: {value: ''},
+        object: {},
+        listParams: {value: 'params={};'},
+        foreignKeys: {value: 'foreignKeys'},
+        objectWithoutParams: {value: [
+          'accessScope',
+          'balance',
+          'carrierService',
+          'currency',
+          'discountCode',
+          'giftCardAdjustment',
+          'location',
+          'orderRisk',
+          'productResourceFeedback',
+          'resourceFeedback',
+          'storefrontAccessToken',
+          'storefrontAccessToken',
+        ]},
+        objectWithForeignKeys: {value: [
+          {name: 'article', params: ['blogId']},
+          {name: 'asset', params: ['themeId']},
+          {name: 'customerAddress', params: ['customerId']},
+          {name: 'discountCode', params: ['priceRuleId']},
+          {name: 'fulfillment', params: ['orderId']},
+          {name: 'giftCardAdjustment', params: ['giftCardId']},
+          {name: 'orderRisk', params: ['orderId']},
+          {name: 'productImage', params: ['productId']},
+          {name: 'productResourceFeedback', params: ['productId']},
+          {name: 'productVariant', params: ['productId']},
+          {name: 'province', params: ['countryId']},
+          {name: 'refund', params: ['orderId']},
+          {name: 'transaction', params: ['orderId']},
+          {name: 'usageCharge', params: ['recurringApplicationChargeId']},
+        ]}
+      },
+      inputs:1,
+      outputs:2,
+      icon: "font-awesome/fa-cubes",
+      label: function() {
+          return this.name || this.object;
+      },
+      oneditprepare: function() {
+        console.log(this.objectWithoutParams);
+        console.log('====')
+
+        this.editor = RED.editor.createEditor({
+          id: 'node-input-editor',
+          mode: 'ace/mode/javascript',
+          value: this.listParams
+        });
+
+       
+
+        $("#node-input-foreignKeys").typedInput({
+          type:'msg',
+          types:['msg'],
+          typeField: '#node-input-foreignKeys-type',
+          value: 'foreignKeys'
+        });
+
+        let self = this;
+        
+        jQuery("#node-input-object").change(function() {
+          const valueSelected = jQuery(this).val();
+          // remove if not have params// remove if not have params
+          if (self.objectWithoutParams.includes(valueSelected)) {
+            console.log('hide')
+            jQuery('#content-params').hide();   
+          } else {
+            console.log('show')
+            jQuery('#content-params').show(); 
+          }
+
+          // add specific params
+          const foreignKeys = self.objectWithForeignKeys.find((el) => el.name === valueSelected);
+          if (foreignKeys) {
+            jQuery('#foreignKeys').show();  
+            jQuery('#foreignKeys-label').html(`<i class="fa fa-tag"></i> ${foreignKeys.params[0]}`);
+          } else {
+            jQuery('#foreignKeys').hide();  
+          }
+        });
+        
+
+      },
+      oneditsave: function() {
+        this.listParams = this.editor.getValue();
+        this.editor.destroy();
+        delete this.editor;
+      },
+      oneditcancel: function() {
+        this.editor.destroy();
+        delete this.editor;
+      }
+  });
+
+  
+
+</script>
+
+<script type="text/html" data-template-name="list">
+  <div class="form-row">
+      <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+      <input type="text" id="node-input-name" placeholder="Name">
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-type"><i class="fa fa-tag"></i> Type</label>
+    <select name="node-input-object" id="node-input-object">
+
+      <option value="accessScope">Access Scope</option>
+      <option value="applicationCharge">Application Charge</option>
+      <option value="applicationCredit">Application Credit</option>
+      <option value="asset">Asset</option>
+      <option value="article">Article</option>
+      <option value="balance">Balance</option>
+      <option value="blog">Blog</option>
+      <option value="carrierService">Carrier Service</option>
+      <option value="checkout">Checkout</option>
+      <option value="collect">Collect</option>
+      <option value="collectionListing">Collection Listing</option>
+      <option value="comment">Comment</option>
+      <option value="country">Country</option>
+      <option value="currency">Currency</option>
+      <option value="customCollection">Custom Collection</option>
+      <option value="customer">Customer</option>
+      <option value="customerAddress">Customer Address</option>
+      <option value="customerSavedSearch">Customer Saved Search </option>
+      <option value="discountCode">Discount Code </option>
+      <option value="dispute">Dispute </option>
+      <option value="draftOrder">Draft Order </option>
+      <option value="event">Event </option>
+      <option value="fulfillment">Fulfillment </option>
+      <option value="fulfillmentEvent">Fulfillment Event </option>
+      <option value="fulfillmentOrder">Fulfillment Order </option>
+      <option value="fulfillmentService">Fulfillment Service </option>
+      <option value="giftCard">GiftCard </option>
+      <option value="giftCardAdjustment">GiftCardAdjustment </option>
+      <option value="inventoryItem">Inventory Item </option>
+      <option value="inventoryLevel">Inventory Level </option>
+      <option value="location">Location </option>
+      <option value="marketingEvent">MarketingEvent </option>
+      <option value="metafield">Metafield</option>
+      <option value="order">Order </option>
+      <option value="orderRisk">Order Risk </option>
+      <option value="page">Page </option>
+      <option value="payment">Payment </option>
+      <option value="payout">Payout </option>
+      <option value="policy">Policy </option>
+      <option value="priceRule">PriceRule </option>
+      <option value="product">Product </option>
+      <option value="productImage">Product Image </option>
+      <option value="productListing">Product Listing </option>
+      <option value="productResourceFeedback">Product Resource Feedback </option>
+      <option value="productVariant">Product Variant </option>
+      <option value="province">Province </option>
+      <option value="recurringApplicationCharge">Recurring Application Charge </option>
+      <option value="redirect">Redirect </option>
+      <option value="refund">Refund </option>
+      <option value="report">Report </option>
+      <option value="resourceFeedback">Resource Feedback </option>
+      <option value="scriptTag">Script Tag </option>
+      <option value="shippingZone">Shipping Zone </option>
+      <option value="smartCollection">Smart Collection </option>
+      <option value="storefrontAccessToken">Storefront Access Token </option>
+      <option value="tenderTransaction">Tender Transaction </option>
+      <option value="theme">Theme </option>
+      <option value="transaction">Transaction </option>
+      <option value="usageCharge">Usage Charge </option>
+      <option value="user">User </option>
+      <option value="webhook">Webhook </option>
+    </select>
+  </div>
+
+  <div class="form-row" id="foreignKeys">
+    <label for="node-input-type" id="foreignKeys-label"><i class="fa fa-key"></i> Foreign Keys</label>
+    <input type="text" id="node-input-foreignKeys">
+    <input type="hidden" id="node-input-foreignKeys-type">
+  </div>
+
+  <div class="form-row" id="content-params">
+    <label for="node-input-editor"><i class="fa fa-filter"></i> List params</label>
+    <div style="height: 250px; min-height:150px;" class="node-text-editor" id="node-input-editor"></div>
+  </div>
+</script>
+
+<!-- Documentation -->
+<script type="text/html" data-help-name="list">
+  <p>Shopify List action</p>
+  
+  <h3>Inputs</h3>
+      <dl class="message-properties">
+          <dt>params
+              <span class="property-type">object</span>
+          </dt>
+          <dd> the params for filter the list results </dd>
+         <dt class="optional">foreignKeys <span class="property-type">string[]</span></dt>
+          <dd> the foreign keys of the selected object .</dd>
+      </dl>
+  
+   <h3>Outputs</h3>
+       <ol class="node-ports">
+           <li>Standard output
+               <dl class="message-properties">
+                   <dt>payload <span class="property-type">string</span></dt>
+                   <dd>the standard output of the command.</dd>
+               </dl>
+           </li>
+           <li>Standard error
+               <dl class="message-properties">
+                   <dt>payload <span class="property-type">string</span></dt>
+                   <dd>the standard error of the command.</dd>
+               </dl>
+           </li>
+       </ol>
+  
+  <h3>Details</h3>
+      <p>this node is used for retreive the list of objects from shopify.
+        Show the examples for understand how to use it.
+      </p>
+      <!-- <p><code>msg.payload</code> is used as the payload of the published message.
+      If it contains an Object it will be converted to a JSON string before being sent.
+      If it contains a binary Buffer the message will be published as-is.</p>
+      <p>The topic used can be configured in the node or, if left blank, can be set
+      by <code>msg.topic</code>.</p>
+      <p>Likewise the QoS and retain values can be configured in the node or, if left
+      blank, set by <code>msg.qos</code> and <code>msg.retain</code> respectively.</p> -->
+  
+  <h3>References</h3>
+      <ul>
+          <li><a href="https://shopify.dev/api/admin-rest" target="_black">Shopify API docs</a> - for more details </li>
+          <li><a>GitHub</a> - the nodes github repository</li>
+      </ul>
+</script>
