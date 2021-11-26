@@ -1,5 +1,5 @@
 {
-  "name": "node-red-contrib-you-shopify",
+  "name": "@yousolution/node-red-contrib-you-shopify",
   "version": "0.0.1",
   "description": "Unofficial Shopify API module for NODE-RED",
   "scripts": {
