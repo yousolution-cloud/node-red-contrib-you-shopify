@@ -1,8 +1,7 @@
 {
   "name": "node-red-contrib-you-shopify",
   "version": "0.0.1",
-  "description": "",
-  "main": "index.js",
+  "description": "Unofficial Shopify API module for NODE-RED",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

@@ -1,11 +1,5 @@
 const Shopify = require('shopify-api-node');
 
-// const shopify = new Shopify({
-//   apiKey: '916f05f18af9464a11bc18ad318ffe36',
-//   shopName: 'yousolutionTest',
-//   password: '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',
-// });
-
 module.exports = function (RED) {
   function AuthenticateNode(config) {
     RED.nodes.createNode(this, config);
@@ -24,16 +18,6 @@ module.exports = function (RED) {
       // this.error(error);
       this.status({ fill: 'gray', shape: 'ring', text: 'Set credentials' });
     }
-
-    // try {
-    //   const list = await shopify.accessScope.list();
-    //   this.status({ fill: 'green', shape: 'dot', text: 'connected' });
-    // } catch (error) {
-    //   this.status({ fill: 'red', shape: 'ring', text: 'disconnected' });
-    // }
-
-    // flowContext.set('shopify', shopify);
-    // nodeContext.set('shopify', shopify);
 
     const node = this;
 

@@ -57,3 +57,6 @@ Thumbs.db
 .flows.json.backup*
 .flows_cred.json.backup*
 .npm
+
+# Private credentials
+credentials.yml
