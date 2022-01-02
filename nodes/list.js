@@ -1,7 +1,10 @@
+const utils = require('../utils');
 module.exports = (RED) => {
   function ListNode(config) {
     RED.nodes.createNode(this, config);
     const node = this;
+    // reset status
+    node.status({});
 
     this.objectWithoutParams = [
       'accessScope',
@@ -35,53 +38,74 @@ module.exports = (RED) => {
       { name: 'usageCharge', params: ['recurringApplicationChargeId'] },
     ];
 
-    node.on('input', async (msg) => {
+    node.on('input', async (msg, send, done) => {
+      // reset status
+      node.status({});
+
+      const object = config.object;
+      let args = [];
+
       try {
-        let listParams = {};
-        if (config.listParams) {
+        if (!msg['_YOU_shopify']) {
+          node.status({ fill: 'red', shape: 'dot', text: utils.MESSAGE.MISSING_CONNECTION });
+          done(new Error(utils.MESSAGE.MISSING_CONNECTION));
+          return;
+        }
+
+        if (!object) {
+          node.status({ fill: 'red', shape: 'dot', text: utils.MESSAGE.MISSING_TYPE });
+          done(new Error(utils.MESSAGE.MISSING_TYPE));
+          return;
+        }
+
+        const hasForeignKeys = this.objectWithForeignKeys.find((el) => el.name === object);
+        if (hasForeignKeys) {
+          if (!config.foreignKeys || Object.keys(config.foreignKeys).length == 0) {
+            node.status({ fill: 'red', shape: 'dot', text: utils.MESSAGE.MISSING_FOREIGN_KEYS });
+            done(new Error(utils.MESSAGE.MISSING_FOREIGN_KEYS));
+            return;
+          }
+
+          if (!Array.isArray(msg[config.foreignKeys])) {
+            msg[config.foreignKeys] = [msg[config.foreignKeys]];
+          }
+
+          args.push(...msg[config.foreignKeys]);
+        }
+
+        // const hasObjectId = !this.objectWithoutId.includes(object);
+        // if (hasObjectId) {
+        //   const objectId = msg[config.objectId];
+        //   if (!objectId) {
+        //     node.status({ fill: 'red', shape: 'dot', text: utils.MESSAGE.MISSING_OBJECT_ID });
+        //     done(new Error(utils.MESSAGE.MISSING_OBJECT_ID));
+        //     return;
+        //   }
+        //   args.push(objectId);
+        // }
+
+        const hasParams = !this.objectWithoutParams.includes(object);
+        if (hasParams) {
           try {
-            listParams = eval(config.listParams);
+            if (!config.listParams || Object.keys(config.listParams).length == 0) {
+              config.listParams = 'params = []';
+            }
+            const listParams = eval(config.listParams);
+            args.push(listParams);
           } catch (error) {
-            console.log(error);
-            node.status({ fill: 'red', shape: 'dot', text: 'List params editor error' });
+            node.status({ fill: 'red', shape: 'dot', text: 'Get params editor error' });
+            done(error);
           }
         }
 
-        const object = config.object;
+        const result = await msg['_YOU_shopify'][object].list(...args);
 
-        // let objectId = msg[config.objectId];
-        // if (objectId) {
-        //   const results = await msg['_YOU_shopify'][object].get(objectId, listParams);
-        //   msg.payload = results;
-        //   node.send([msg, []]);
-        //   return;
-        // }
-
-        if (this.objectWithoutParams.includes(object)) {
-          const results = await msg['_YOU_shopify'][object].list();
-
-          msg.payload = results;
-          node.send([msg, []]);
-          return;
-        }
-
-        const foreignKeys = this.objectWithForeignKeys.find((el) => el.name === object);
-
-        if (foreignKeys) {
-          const results = await msg['_YOU_shopify'][object].list(msg[config.foreignKeys], listParams);
-
-          msg.payload = results;
-          node.send([msg, []]);
-          return;
-        }
-
-        const results = await msg['_YOU_shopify'][object].list(listParams);
-
-        msg.payload = results;
-        node.send([msg, []]);
+        msg.payload = result;
+        node.status({ fill: 'green', shape: 'dot', text: 'success' });
+        node.send(msg);
       } catch (error) {
-        this.error(error);
-        node.send([[], error]);
+        node.status({ fill: 'red', shape: 'dot', text: utils.MESSAGE.ERROR_DURING_LIST });
+        done(error);
       }
     });
   }

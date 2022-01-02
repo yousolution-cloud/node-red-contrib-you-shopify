@@ -1,0 +1,16 @@
+module.exports.MESSAGE = {
+  MISSING_CONNECTION: 'Missing shopify connection',
+  MISSING_TYPE: "missing type. Select it from node's edit panel",
+  MISSING_CREATE_PARAMS: 'Missing create params value',
+  MISSING_DELETE_PARAMS: 'Missing delete params value',
+  MISSING_GET_PARAMS: 'Missing get params value',
+  MISSING_LIST_PARAMS: 'Missing list params value',
+  MISSING_UPDATE_PARAMS: 'Missing update params value',
+  MISSING_OBJECT_ID: 'Missing object id',
+  MISSING_FOREIGN_KEYS: 'Missing object foreign keys',
+  ERROR_DURING_CREATE: 'Error during create object',
+  ERROR_DURING_DELETE: 'Error during delete object',
+  ERROR_DURING_GET: 'Error during get object',
+  ERROR_DURING_LIST: 'Error during list object',
+  ERROR_DURING_UPDATE: 'Error during update object',
+};

@@ -1,7 +1,9 @@
+const utils = require('../utils');
 module.exports = (RED) => {
   function CreateNode(config) {
     RED.nodes.createNode(this, config);
     const node = this;
+    node.status({});
 
     this.objectWithForeignKeys = [
       { name: 'article', params: ['blogId'] },
@@ -24,15 +26,32 @@ module.exports = (RED) => {
       { name: 'usageCharge', params: ['recurringApplicationChargeId'] },
     ];
 
-    node.on('input', async (msg) => {
+    node.on('input', async (msg, send, done) => {
       try {
-        let createParams = msg[config.createParams];
-        if (!createParams) {
-          node.status({ fill: 'red', shape: 'dot', text: 'Create params must have value' });
+        const createParams = msg[config.createParams];
+        const object = config.object;
+
+        // reset status
+        node.status({});
+
+        if (!msg['_YOU_shopify']) {
+          node.status({ fill: 'red', shape: 'dot', text: utils.MESSAGE.MISSING_CONNECTION });
+          done(new Error(utils.MESSAGE.MISSING_CONNECTION));
           return;
         }
 
-        const object = config.object;
+        if (!object) {
+          node.status({ fill: 'red', shape: 'dot', text: utils.MESSAGE.MISSING_TYPE });
+          done(new Error(utils.MESSAGE.MISSING_TYPE));
+          return;
+        }
+
+        if (!createParams) {
+          node.status({ fill: 'red', shape: 'dot', text: utils.MESSAGE.MISSING_CREATE_PARAMS });
+          done(new Error(utils.MESSAGE.MISSING_CREATE_PARAMS));
+          return;
+        }
+
         const foreignKeys = this.objectWithForeignKeys.find((el) => el.name === object);
 
         if (foreignKeys) {
@@ -40,38 +59,32 @@ module.exports = (RED) => {
             msg[config.foreignKeys] = [msg[config.foreignKeys]];
           }
 
-          // let result;
           try {
             const result = await msg['_YOU_shopify'][object].create(...msg[config.foreignKeys], createParams);
+            msg.payload = result;
+            node.send(msg);
+            return;
           } catch (error) {
-            console.log(error);
-            node.status({ fill: 'red', shape: 'dot', text: 'Error during create data' });
-            this.error(error);
-            node.send([[], error]);
+            node.status({ fill: 'red', shape: 'dot', text: utils.MESSAGE.ERROR_DURING_CREATE });
+            done(error);
             return;
           }
-
-          msg.payload = result;
-          node.send([msg, []]);
-          return;
         }
 
-        let result;
         try {
           const result = await msg['_YOU_shopify'][object].create(createParams);
           msg.payload = result;
-          node.send([msg, []]);
+          node.send(msg);
           node.status({ fill: 'green', shape: 'dot', text: 'success' });
           return;
         } catch (error) {
-          node.status({ fill: 'red', shape: 'dot', text: 'Error during create data' });
-          this.error(error);
-          node.send([[], error]);
+          node.status({ fill: 'red', shape: 'dot', text: utils.MESSAGE.ERROR_DURING_CREATE });
+          done(error);
           return;
         }
       } catch (error) {
-        this.error(error);
-        node.send([[], error]);
+        done(error);
+        return;
       }
     });
   }

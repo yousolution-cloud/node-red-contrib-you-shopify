@@ -1,5 +1,11 @@
 [
-  { "id": "e063412830d2eed3", "type": "tab", "label": "Flow 1", "disabled": false, "info": "" },
+  {
+    "id": "e063412830d2eed3",
+    "type": "tab",
+    "label": "Flow 1",
+    "disabled": false,
+    "info": ""
+  },
   {
     "id": "08d504ea8e705f7d",
     "type": "authenticate",
@@ -8,14 +14,22 @@
     "shopName": "yousolutionTest",
     "x": 320,
     "y": 320,
-    "wires": [[], []]
+    "wires": [["bb9cd1f5088df561"]]
   },
   {
     "id": "66b440dd9d7529cf",
     "type": "inject",
     "z": "e063412830d2eed3",
     "name": "",
-    "props": [{ "p": "payload" }, { "p": "topic", "vt": "str" }],
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
     "repeat": "",
     "crontab": "",
     "once": false,
@@ -50,80 +64,66 @@
       "storefrontAccessToken"
     ],
     "objectWithForeignKeys": [
-      { "name": "article", "params": ["blogId"] },
-      { "name": "asset", "params": ["themeId"] },
-      { "name": "customerAddress", "params": ["customerId"] },
-      { "name": "discountCode", "params": ["priceRuleId"] },
-      { "name": "fulfillment", "params": ["orderId"] },
-      { "name": "giftCardAdjustment", "params": ["giftCardId"] },
-      { "name": "orderRisk", "params": ["orderId"] },
-      { "name": "productImage", "params": ["productId"] },
-      { "name": "productResourceFeedback", "params": ["productId"] },
-      { "name": "productVariant", "params": ["productId"] },
-      { "name": "province", "params": ["countryId"] },
-      { "name": "refund", "params": ["orderId"] },
-      { "name": "transaction", "params": ["orderId"] },
-      { "name": "usageCharge", "params": ["recurringApplicationChargeId"] }
+      {
+        "name": "article",
+        "params": ["blogId"]
+      },
+      {
+        "name": "asset",
+        "params": ["themeId"]
+      },
+      {
+        "name": "customerAddress",
+        "params": ["customerId"]
+      },
+      {
+        "name": "discountCode",
+        "params": ["priceRuleId"]
+      },
+      {
+        "name": "fulfillment",
+        "params": ["orderId"]
+      },
+      {
+        "name": "giftCardAdjustment",
+        "params": ["giftCardId"]
+      },
+      {
+        "name": "orderRisk",
+        "params": ["orderId"]
+      },
+      {
+        "name": "productImage",
+        "params": ["productId"]
+      },
+      {
+        "name": "productResourceFeedback",
+        "params": ["productId"]
+      },
+      {
+        "name": "productVariant",
+        "params": ["productId"]
+      },
+      {
+        "name": "province",
+        "params": ["countryId"]
+      },
+      {
+        "name": "refund",
+        "params": ["orderId"]
+      },
+      {
+        "name": "transaction",
+        "params": ["orderId"]
+      },
+      {
+        "name": "usageCharge",
+        "params": ["recurringApplicationChargeId"]
+      }
     ],
     "x": 740,
     "y": 180,
-    "wires": [["472dc7ad2c5e6474"], []]
-  },
-  {
-    "id": "8df4d3cdd070446e",
-    "type": "get",
-    "z": "e063412830d2eed3",
-    "name": "",
-    "object": "customer",
-    "objectId": "objectId",
-    "getParams": "params={\n    fields: ['id', 'first_name', 'last_name', 'email']\n};",
-    "foreignKeys": "foreignKeys",
-    "objectWithoutParams": [
-      "carrierService",
-      "checkout",
-      "collectionListing",
-      "customerAddress",
-      "discountCode",
-      "discountCodeCreationJob",
-      "dispute",
-      "fulfillmentEvent",
-      "fulfillmentOrder",
-      "fulfillmentService",
-      "giftCard",
-      "giftCardAdjustment",
-      "inventoryItem",
-      "location",
-      "marketingEvent",
-      "orderRisk",
-      "payment",
-      "payout",
-      "priceRule",
-      "productListing",
-      "user"
-    ],
-    "objectWithForeignKeys": [
-      { "name": "article", "params": ["blogId"] },
-      { "name": "asset", "params": ["themeId"] },
-      { "name": "customerAddress", "params": ["customerId"] },
-      { "name": "discountCode", "params": ["priceRuleId"] },
-      { "name": "discountCodeCreationJob", "params": ["priceRuleId"] },
-      { "name": "fulfillment", "params": ["orderId"] },
-      { "name": "fulfillmentEvent", "params": ["orderId", "fulfillmentId"] },
-      { "name": "giftCardAdjustment", "params": ["giftCardId"] },
-      { "name": "orderRisk", "params": ["orderId"] },
-      { "name": "payment", "params": ["checkoutToken"] },
-      { "name": "productImage", "params": ["productId"] },
-      { "name": "productListing", "params": ["productId"] },
-      { "name": "productResourceFeedback", "params": ["productId"] },
-      { "name": "productVariant", "params": ["productId"] },
-      { "name": "province", "params": ["countryId"] },
-      { "name": "refund", "params": ["orderId"] },
-      { "name": "transaction", "params": ["orderId"] },
-      { "name": "usageCharge", "params": ["recurringApplicationChargeId"] }
-    ],
-    "x": 740,
-    "y": 240,
-    "wires": [["472dc7ad2c5e6474"], []]
+    "wires": [["472dc7ad2c5e6474"]]
   },
   {
     "id": "cb5a7d9abc9b31d1",
@@ -134,29 +134,86 @@
     "createParams": "createParams",
     "foreignKeys": "foreignKeys",
     "objectWithForeignKeys": [
-      { "name": "article", "params": ["blogId"] },
-      { "name": "asset", "params": ["themeId"] },
-      { "name": "cancellationRequest", "params": ["fulfillmentOrderId"] },
-      { "name": "customerAddress", "params": ["customerId"] },
-      { "name": "discountCode", "params": ["priceRuleId"] },
-      { "name": "discountCodeCreationJob", "params": ["priceRuleId"] },
-      { "name": "fulfillment", "params": ["orderId"] },
-      { "name": "fulfillmentEvent", "params": ["orderId", "fulfillmentId"] },
-      { "name": "fulfillmentRequest", "params": ["fulfillmentOrderId"] },
-      { "name": "giftCardAdjustment", "params": ["giftCardId"] },
-      { "name": "orderRisk", "params": ["orderId"] },
-      { "name": "payment", "params": ["checkoutToken"] },
-      { "name": "productImage", "params": ["productId"] },
-      { "name": "productListing", "params": ["productId"] },
-      { "name": "productResourceFeedback", "params": ["productId"] },
-      { "name": "productVariant", "params": ["productId"] },
-      { "name": "refund", "params": ["orderId"] },
-      { "name": "transaction", "params": ["orderId"] },
-      { "name": "usageCharge", "params": ["recurringApplicationChargeId"] }
+      {
+        "name": "article",
+        "params": ["blogId"]
+      },
+      {
+        "name": "asset",
+        "params": ["themeId"]
+      },
+      {
+        "name": "cancellationRequest",
+        "params": ["fulfillmentOrderId"]
+      },
+      {
+        "name": "customerAddress",
+        "params": ["customerId"]
+      },
+      {
+        "name": "discountCode",
+        "params": ["priceRuleId"]
+      },
+      {
+        "name": "discountCodeCreationJob",
+        "params": ["priceRuleId"]
+      },
+      {
+        "name": "fulfillment",
+        "params": ["orderId"]
+      },
+      {
+        "name": "fulfillmentEvent",
+        "params": ["orderId", "fulfillmentId"]
+      },
+      {
+        "name": "fulfillmentRequest",
+        "params": ["fulfillmentOrderId"]
+      },
+      {
+        "name": "giftCardAdjustment",
+        "params": ["giftCardId"]
+      },
+      {
+        "name": "orderRisk",
+        "params": ["orderId"]
+      },
+      {
+        "name": "payment",
+        "params": ["checkoutToken"]
+      },
+      {
+        "name": "productImage",
+        "params": ["productId"]
+      },
+      {
+        "name": "productListing",
+        "params": ["productId"]
+      },
+      {
+        "name": "productResourceFeedback",
+        "params": ["productId"]
+      },
+      {
+        "name": "productVariant",
+        "params": ["productId"]
+      },
+      {
+        "name": "refund",
+        "params": ["orderId"]
+      },
+      {
+        "name": "transaction",
+        "params": ["orderId"]
+      },
+      {
+        "name": "usageCharge",
+        "params": ["recurringApplicationChargeId"]
+      }
     ],
     "x": 740,
     "y": 400,
-    "wires": [["472dc7ad2c5e6474"], []]
+    "wires": [["472dc7ad2c5e6474"]]
   },
   {
     "id": "cf6d6a8cbce85da0",
@@ -164,6 +221,8 @@
     "z": "e063412830d2eed3",
     "objectId": "objectId",
     "deleteParams": "deleteParams",
+    "foreignKeys": "foreignKeys",
+    "object": "productListing",
     "objectWithoutId": ["apiPermission", "inventoryLevel"],
     "objectWithoutParams": [
       "apiPermission",
@@ -200,42 +259,50 @@
       "webhook"
     ],
     "objectWithForeignKeys": [
-      { "name": "article", "params": ["blogId"] },
-      { "name": "asset", "params": ["themeId"] },
-      { "name": "customerAddress", "params": ["customerId"] },
-      { "name": "discountCode", "params": ["priceRuleId"] },
-      { "name": "discountCodeCreationJob", "params": ["priceRuleId"] },
-      { "name": "fulfillmentEvent", "params": ["orderId", "fulfillmentId"] },
-      { "name": "orderRisk", "params": ["orderId"] },
-      { "name": "productImage", "params": ["productId"] },
-      { "name": "productListing", "params": ["productId"] },
-      { "name": "productVariant", "params": ["productId"] }
+      {
+        "name": "article",
+        "params": ["blogId"]
+      },
+      {
+        "name": "asset",
+        "params": ["themeId"]
+      },
+      {
+        "name": "customerAddress",
+        "params": ["customerId"]
+      },
+      {
+        "name": "discountCode",
+        "params": ["priceRuleId"]
+      },
+      {
+        "name": "discountCodeCreationJob",
+        "params": ["priceRuleId"]
+      },
+      {
+        "name": "fulfillmentEvent",
+        "params": ["orderId", "fulfillmentId"]
+      },
+      {
+        "name": "orderRisk",
+        "params": ["orderId"]
+      },
+      {
+        "name": "productImage",
+        "params": ["productId"]
+      },
+      {
+        "name": "productListing",
+        "params": ["productId"]
+      },
+      {
+        "name": "productVariant",
+        "params": ["productId"]
+      }
     ],
-    "x": 730,
+    "x": 760,
     "y": 580,
-    "wires": [["472dc7ad2c5e6474"], []]
-  },
-  {
-    "id": "d3981a1d0d6c3d55",
-    "type": "update",
-    "z": "e063412830d2eed3",
-    "objectId": "objectId",
-    "updateParams": "updateParams",
-    "objectWithForeignKeys": [
-      { "name": "article", "params": ["blogId"] },
-      { "name": "asset", "params": ["themeId"] },
-      { "name": "customerAddress", "params": ["customerId"] },
-      { "name": "discountCode", "params": ["priceRuleId"] },
-      { "name": "fulfillment", "params": ["orderId"] },
-      { "name": "fulfillmentEvent", "params": ["orderId", "fulfillmentId"] },
-      { "name": "orderRisk", "params": ["orderId"] },
-      { "name": "productImage", "params": ["productId"] },
-      { "name": "productResourceFeedback", "params": ["productId"] },
-      { "name": "province", "params": ["countryId"] }
-    ],
-    "x": 740,
-    "y": 460,
-    "wires": [["472dc7ad2c5e6474"], []]
+    "wires": [["472dc7ad2c5e6474"]]
   },
   {
     "id": "a7c0d04714e86498",
@@ -259,24 +326,66 @@
       "storefrontAccessToken"
     ],
     "objectWithForeignKeys": [
-      { "name": "article", "params": ["blogId"] },
-      { "name": "asset", "params": ["themeId"] },
-      { "name": "customerAddress", "params": ["customerId"] },
-      { "name": "discountCode", "params": ["priceRuleId"] },
-      { "name": "fulfillment", "params": ["orderId"] },
-      { "name": "giftCardAdjustment", "params": ["giftCardId"] },
-      { "name": "orderRisk", "params": ["orderId"] },
-      { "name": "productImage", "params": ["productId"] },
-      { "name": "productResourceFeedback", "params": ["productId"] },
-      { "name": "productVariant", "params": ["productId"] },
-      { "name": "province", "params": ["countryId"] },
-      { "name": "refund", "params": ["orderId"] },
-      { "name": "transaction", "params": ["orderId"] },
-      { "name": "usageCharge", "params": ["recurringApplicationChargeId"] }
+      {
+        "name": "article",
+        "params": ["blogId"]
+      },
+      {
+        "name": "asset",
+        "params": ["themeId"]
+      },
+      {
+        "name": "customerAddress",
+        "params": ["customerId"]
+      },
+      {
+        "name": "discountCode",
+        "params": ["priceRuleId"]
+      },
+      {
+        "name": "fulfillment",
+        "params": ["orderId"]
+      },
+      {
+        "name": "giftCardAdjustment",
+        "params": ["giftCardId"]
+      },
+      {
+        "name": "orderRisk",
+        "params": ["orderId"]
+      },
+      {
+        "name": "productImage",
+        "params": ["productId"]
+      },
+      {
+        "name": "productResourceFeedback",
+        "params": ["productId"]
+      },
+      {
+        "name": "productVariant",
+        "params": ["productId"]
+      },
+      {
+        "name": "province",
+        "params": ["countryId"]
+      },
+      {
+        "name": "refund",
+        "params": ["orderId"]
+      },
+      {
+        "name": "transaction",
+        "params": ["orderId"]
+      },
+      {
+        "name": "usageCharge",
+        "params": ["recurringApplicationChargeId"]
+      }
     ],
     "x": 730,
     "y": 520,
-    "wires": [["472dc7ad2c5e6474"], []]
+    "wires": [["472dc7ad2c5e6474"]]
   },
   {
     "id": "472dc7ad2c5e6474",
@@ -308,7 +417,7 @@
     "libs": [],
     "x": 580,
     "y": 240,
-    "wires": [["8df4d3cdd070446e"]]
+    "wires": [["85bee4e5706866dc"]]
   },
   {
     "id": "fb128379fd6eee44",
@@ -333,24 +442,66 @@
       "storefrontAccessToken"
     ],
     "objectWithForeignKeys": [
-      { "name": "article", "params": ["blogId"] },
-      { "name": "asset", "params": ["themeId"] },
-      { "name": "customerAddress", "params": ["customerId"] },
-      { "name": "discountCode", "params": ["priceRuleId"] },
-      { "name": "fulfillment", "params": ["orderId"] },
-      { "name": "giftCardAdjustment", "params": ["giftCardId"] },
-      { "name": "orderRisk", "params": ["orderId"] },
-      { "name": "productImage", "params": ["productId"] },
-      { "name": "productResourceFeedback", "params": ["productId"] },
-      { "name": "productVariant", "params": ["productId"] },
-      { "name": "province", "params": ["countryId"] },
-      { "name": "refund", "params": ["orderId"] },
-      { "name": "transaction", "params": ["orderId"] },
-      { "name": "usageCharge", "params": ["recurringApplicationChargeId"] }
+      {
+        "name": "article",
+        "params": ["blogId"]
+      },
+      {
+        "name": "asset",
+        "params": ["themeId"]
+      },
+      {
+        "name": "customerAddress",
+        "params": ["customerId"]
+      },
+      {
+        "name": "discountCode",
+        "params": ["priceRuleId"]
+      },
+      {
+        "name": "fulfillment",
+        "params": ["orderId"]
+      },
+      {
+        "name": "giftCardAdjustment",
+        "params": ["giftCardId"]
+      },
+      {
+        "name": "orderRisk",
+        "params": ["orderId"]
+      },
+      {
+        "name": "productImage",
+        "params": ["productId"]
+      },
+      {
+        "name": "productResourceFeedback",
+        "params": ["productId"]
+      },
+      {
+        "name": "productVariant",
+        "params": ["productId"]
+      },
+      {
+        "name": "province",
+        "params": ["countryId"]
+      },
+      {
+        "name": "refund",
+        "params": ["orderId"]
+      },
+      {
+        "name": "transaction",
+        "params": ["orderId"]
+      },
+      {
+        "name": "usageCharge",
+        "params": ["recurringApplicationChargeId"]
+      }
     ],
     "x": 770,
     "y": 300,
-    "wires": [["472dc7ad2c5e6474"], []]
+    "wires": [["472dc7ad2c5e6474"]]
   },
   {
     "id": "95b4081f2a003a1d",
@@ -381,5 +532,200 @@
     "x": 560,
     "y": 400,
     "wires": [["cb5a7d9abc9b31d1"]]
+  },
+  {
+    "id": "3f2d5665826c9fa9",
+    "type": "function",
+    "z": "e063412830d2eed3",
+    "name": "objectId",
+    "func": "msg.objectId = 5656376410309;\n// msg.foreignKeys = [1]\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 540,
+    "y": 520,
+    "wires": [["cf6d6a8cbce85da0"]]
+  },
+  {
+    "id": "1fa766f4a3f96631",
+    "type": "function",
+    "z": "e063412830d2eed3",
+    "name": "objectId",
+    "func": "msg.objectId = 5656376410309;\nmsg.updateParams = {\n    last_name: \"Rossi\"\n}\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 560,
+    "y": 460,
+    "wires": [["18f2020d84b45518"]]
+  },
+  {
+    "id": "18f2020d84b45518",
+    "type": "update",
+    "z": "e063412830d2eed3",
+    "object": "customer",
+    "objectId": "objectId",
+    "updateParams": "updateParams",
+    "objectWithoutId": ["asset", "checkout"],
+    "objectWithForeignKeys": [
+      {
+        "name": "article",
+        "params": ["blogId"]
+      },
+      {
+        "name": "asset",
+        "params": ["themeId"]
+      },
+      {
+        "name": "customerAddress",
+        "params": ["customerId"]
+      },
+      {
+        "name": "discountCode",
+        "params": ["priceRuleId"]
+      },
+      {
+        "name": "fulfillment",
+        "params": ["orderId"]
+      },
+      {
+        "name": "fulfillmentEvent",
+        "params": ["orderId", "fulfillmentId"]
+      },
+      {
+        "name": "orderRisk",
+        "params": ["orderId"]
+      },
+      {
+        "name": "productImage",
+        "params": ["productId"]
+      },
+      {
+        "name": "productResourceFeedback",
+        "params": ["productId"]
+      },
+      {
+        "name": "province",
+        "params": ["countryId"]
+      }
+    ],
+    "x": 740,
+    "y": 460,
+    "wires": [["472dc7ad2c5e6474"]]
+  },
+  {
+    "id": "85bee4e5706866dc",
+    "type": "get",
+    "z": "e063412830d2eed3",
+    "name": "",
+    "object": "customer",
+    "objectId": "objectId",
+    "getParams": "params={\n    fields: ['first_name', 'last_name', 'email' ]\n};",
+    "foreignKeys": "foreignKeys",
+    "objectWithoutId": ["asset", "checkout", "productListing", "shop"],
+    "objectWithoutParams": [
+      "carrierService",
+      "checkout",
+      "collectionListing",
+      "customerAddress",
+      "discountCode",
+      "discountCodeCreationJob",
+      "dispute",
+      "fulfillmentEvent",
+      "fulfillmentOrder",
+      "fulfillmentService",
+      "giftCard",
+      "giftCardAdjustment",
+      "inventoryItem",
+      "location",
+      "marketingEvent",
+      "orderRisk",
+      "payment",
+      "payout",
+      "priceRule",
+      "productListing",
+      "user"
+    ],
+    "objectWithForeignKeys": [
+      {
+        "name": "article",
+        "params": ["blogId"]
+      },
+      {
+        "name": "asset",
+        "params": ["themeId"]
+      },
+      {
+        "name": "customerAddress",
+        "params": ["customerId"]
+      },
+      {
+        "name": "discountCode",
+        "params": ["priceRuleId"]
+      },
+      {
+        "name": "discountCodeCreationJob",
+        "params": ["priceRuleId"]
+      },
+      {
+        "name": "fulfillment",
+        "params": ["orderId"]
+      },
+      {
+        "name": "fulfillmentEvent",
+        "params": ["orderId", "fulfillmentId"]
+      },
+      {
+        "name": "giftCardAdjustment",
+        "params": ["giftCardId"]
+      },
+      {
+        "name": "orderRisk",
+        "params": ["orderId"]
+      },
+      {
+        "name": "payment",
+        "params": ["checkoutToken"]
+      },
+      {
+        "name": "productImage",
+        "params": ["productId"]
+      },
+      {
+        "name": "productListing",
+        "params": ["productId"]
+      },
+      {
+        "name": "productResourceFeedback",
+        "params": ["productId"]
+      },
+      {
+        "name": "productVariant",
+        "params": ["productId"]
+      },
+      {
+        "name": "province",
+        "params": ["countryId"]
+      },
+      {
+        "name": "refund",
+        "params": ["orderId"]
+      },
+      {
+        "name": "transaction",
+        "params": ["orderId"]
+      },
+      {
+        "name": "usageCharge",
+        "params": ["recurringApplicationChargeId"]
+      }
+    ],
+    "x": 740,
+    "y": 240,
+    "wires": [["472dc7ad2c5e6474"]]
   }
 ]

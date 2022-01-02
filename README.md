@@ -10,13 +10,13 @@
 This module provides a set of nodes for Node-RED to quickly create integration flows with Shopify API.
 
 # Installation
-[![NPM](https://nodei.co/npm/node-red-contrib-you-shopify.png?downloads=true)](https://nodei.co/npm/node-red-contrib-you-shopify/)
+[![NPM](https://nodei.co/npm/@yuosolution/node-red-contrib-you-shopify.png?downloads=true)](https://nodei.co/npm/@yousolution/node-red-contrib-you-shopify/)
 
 You can install the nodes using node-red's "Manage palette" in the side bar.
 
 Or run the following command in the root directory of your Node-RED installation
 
-    npm install node-red-contrib-you-shopify --save
+    npm install @yousolution/node-red-contrib-you-shopify --save
 ****
 
 # Dependencies
@@ -100,7 +100,3 @@ Use this node to count the number of objects per type.
 
 You can see how to use it in the example flows in the */examples* directory.\
 *For more details see official [Shopify API documentation](https://shopify.dev/api/admin-rest)* 
-
-
-
-

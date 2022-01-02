@@ -6,6 +6,8 @@
 # Node artifact files
 node_modules/
 dist/
+data/*
+!data/.gitkeep
 
 # Compiled Java class files
 *.class

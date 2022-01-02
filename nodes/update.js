@@ -1,11 +1,18 @@
+const utils = require('../utils');
 module.exports = (RED) => {
   function UpdateNode(config) {
     RED.nodes.createNode(this, config);
     const node = this;
 
+    // reset status
+    node.status({});
+
+    this.objectWithoutId = ['asset', 'checkout'];
+
     this.objectWithForeignKeys = [
       { name: 'article', params: ['blogId'] },
       { name: 'asset', params: ['themeId'] },
+      { name: 'checkout', params: ['token'] },
       { name: 'customerAddress', params: ['customerId'] },
       { name: 'discountCode', params: ['priceRuleId'] },
       { name: 'fulfillment', params: ['orderId'] },
@@ -16,57 +23,71 @@ module.exports = (RED) => {
       { name: 'province', params: ['countryId'] },
     ];
 
-    node.on('input', async (msg) => {
+    node.on('input', async (msg, send, done) => {
+      // reset status
+      node.status({});
+
+      const object = config.object;
+      const updateParams = msg[config.updateParams];
+      let args = [];
+
       try {
-        let objectId = msg[config.objectId];
-        if (!objectId) {
-          node.status({ fill: 'red', shape: 'dot', text: 'Update id must have value' });
+        if (!msg['_YOU_shopify'] || Object.keys(msg['_YOU_shopify']).length == 0) {
+          node.status({ fill: 'red', shape: 'dot', text: utils.MESSAGE.MISSING_CONNECTION });
+          done(new Error(utils.MESSAGE.MISSING_CONNECTION));
           return;
         }
 
-        let updateParams = msg[config.updateParams];
-        if (!updateParams) {
-          node.status({ fill: 'red', shape: 'dot', text: 'Update params must have value' });
+        if (!object) {
+          node.status({ fill: 'red', shape: 'dot', text: utils.MESSAGE.MISSING_TYPE });
+          done(new Error(utils.MESSAGE.MISSING_TYPE));
           return;
         }
-        // let updateParams = {};
-        // if (config.updateParams) {
-        //   try {
-        //     updateParams = eval(config.updateParams);
-        //   } catch (error) {
-        //     console.log(error);
-        //     node.status({ fill: 'red', shape: 'dot', text: 'Update params editor error' });
-        //   }
-        // }
 
-        const object = config.object;
-        const foreignKeys = this.objectWithForeignKeys.find((el) => el.name === object);
-        if (foreignKeys) {
+        const hasForeignKeys = this.objectWithForeignKeys.find((el) => el.name === object);
+        if (hasForeignKeys) {
+          if (!config.foreignKeys || Object.keys(config.foreignKeys).length == 0) {
+            node.status({ fill: 'red', shape: 'dot', text: utils.MESSAGE.MISSING_FOREIGN_KEYS });
+            done(new Error(utils.MESSAGE.MISSING_FOREIGN_KEYS));
+            return;
+          }
+
           if (!Array.isArray(msg[config.foreignKeys])) {
             msg[config.foreignKeys] = [msg[config.foreignKeys]];
           }
 
-          try {
-            const result = await msg['_YOU_shopify'][object].update(...msg[config.foreignKeys], objectId, createParams);
-            msg.payload = result;
-            node.send([msg, []]);
-            return;
-          } catch (error) {
-            console.log(error);
-            node.status({ fill: 'red', shape: 'dot', text: 'Error during update data' });
-            this.error(error);
-            node.send([[], error]);
-            return;
-          }
+          args.push(...msg[config.foreignKeys]);
         }
 
-        const result = await msg['_YOU_shopify'][object].update(objectId, updateParams);
+        const hasObjectId = !this.objectWithoutId.includes(object);
+        if (hasObjectId) {
+          const objectId = msg[config.objectId];
+          if (!objectId) {
+            node.status({ fill: 'red', shape: 'dot', text: utils.MESSAGE.MISSING_OBJECT_ID });
+            done(new Error(utils.MESSAGE.MISSING_OBJECT_ID));
+            return;
+          }
+          args.push(objectId);
+        }
+
+        // params
+        if (!updateParams || Object.keys(updateParams).length == 0) {
+          node.status({ fill: 'red', shape: 'dot', text: utils.MESSAGE.MISSING_UPDATE_PARAMS });
+          done(new Error(utils.MESSAGE.MISSING_UPDATE_PARAMS));
+          return;
+          // config.updateParams = 'params = []';
+        }
+        // const updateParams = eval(config.updateParams);
+        args.push(updateParams);
+
+        const result = await msg['_YOU_shopify'][object].update(...args);
 
         msg.payload = result;
-        node.send([msg, []]);
+        node.status({ fill: 'green', shape: 'dot', text: 'success' });
+        node.send(msg);
       } catch (error) {
-        this.error(error);
-        node.send([[], error]);
+        node.status({ fill: 'red', shape: 'dot', text: utils.MESSAGE.ERROR_DURING_UPDATE });
+        done(error);
       }
     });
   }

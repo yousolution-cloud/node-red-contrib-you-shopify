@@ -13,6 +13,10 @@
       object: {},
       objectId: {value: 'objectId'},
       updateParams: {value: 'updateParams'},
+      objectWithoutId: {value: [
+        'asset',
+        'checkout'
+      ]},
       objectWithForeignKeys: {value: [
         {name: 'article', params: ['blogId']},
         {name: 'asset', params: ['themeId']},
@@ -27,12 +31,13 @@
       ]}
     },
     inputs:1,
-    outputs:2,
+    outputs:1,
     icon: "font-awesome/fa-pencil-square",
     label: function() {
       return this.name || this.object;
     },
     oneditprepare: function() {
+
       $("#node-input-objectId").typedInput({
         type:'msg',
         types:['msg'],
@@ -52,6 +57,15 @@
         
       jQuery("#node-input-object").change(function() {
         const valueSelected = jQuery(this).val();
+
+        // remove if not have objectId
+        if (self.objectWithoutId.includes(valueSelected)) {
+          // console.log('hide')
+          jQuery('#content-objectId').hide();   
+        } else {
+          // console.log('show')
+          jQuery('#content-objectId').show(); 
+        }
         // remove if not have params// remove if not have params
         // if (self.objectWithoutParams.includes(valueSelected)) {
         //   console.log('hide')
@@ -119,11 +133,8 @@
     </select>
   </div> 
 
-
-
-
     
-  <div class="form-row">
+  <div class="form-row" id="content-objectId">
     <label for="node-input-type"><i class="fa fa-comment"></i> Object id</label>
     <input type="text" id="node-input-objectId">
     <input type="hidden" id="node-input-objectId-type">
@@ -169,12 +180,6 @@
                <dl class="message-properties">
                    <dt>payload <span class="property-type">string</span></dt>
                    <dd>the standard output of the command.</dd>
-               </dl>
-           </li>
-           <li>Standard error
-               <dl class="message-properties">
-                   <dt>error <span class="property-type">string</span></dt>
-                   <dd>the standard error of the command.</dd>
                </dl>
            </li>
        </ol>

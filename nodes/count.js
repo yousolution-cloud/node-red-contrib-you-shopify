@@ -1,7 +1,9 @@
+const utils = require('../utils');
 module.exports = (RED) => {
   function CountNode(config) {
     RED.nodes.createNode(this, config);
     const node = this;
+    node.status({});
 
     this.objectWithoutParams = [
       'accessScope',
@@ -35,19 +37,33 @@ module.exports = (RED) => {
       { name: 'usageCharge', params: ['recurringApplicationChargeId'] },
     ];
 
-    node.on('input', async (msg) => {
+    node.on('input', async (msg, send, done) => {
       try {
         let countParams = {};
+        // reset status
+        node.status({});
+
+        if (!msg['_YOU_shopify']) {
+          node.status({ fill: 'red', shape: 'dot', text: utils.MESSAGE.MISSING_CONNECTION });
+          done(new Error(utils.MESSAGE.MISSING_CONNECTION));
+          return;
+        }
         if (config.countParams) {
           try {
             countParams = eval(config.countParams);
           } catch (error) {
-            console.log(error);
             node.status({ fill: 'red', shape: 'dot', text: 'Count params editor error' });
+            done(error);
+            return;
           }
         }
 
         const object = config.object;
+        if (!object) {
+          node.status({ fill: 'red', shape: 'dot', text: "missing type. Select it from node's edit panel" });
+          done(new Error("missing type. Select it from node's edit panel"));
+          return;
+        }
 
         // let objectId = msg[config.objectId];
         // if (objectId) {
@@ -58,11 +74,15 @@ module.exports = (RED) => {
         // }
 
         if (this.objectWithoutParams.includes(object)) {
-          const results = await msg['_YOU_shopify'][object].count();
-
-          msg.payload = results;
-          node.send([msg, []]);
-          return;
+          try {
+            const results = await msg['_YOU_shopify'][object].count();
+            msg.payload = results;
+            node.send([msg, []]);
+            return;
+          } catch (error) {
+            done(error);
+            return;
+          }
         }
 
         const foreignKeys = this.objectWithForeignKeys.find((el) => el.name === object);
@@ -71,7 +91,7 @@ module.exports = (RED) => {
           const results = await msg['_YOU_shopify'][object].count(msg[config.foreignKeys], countParams);
 
           msg.payload = results;
-          node.send([msg, []]);
+          node.send(msg);
           return;
         }
 
@@ -79,9 +99,11 @@ module.exports = (RED) => {
 
         msg.payload = results;
         node.send([msg, []]);
+        return;
       } catch (error) {
-        this.error(error);
-        node.send([[], error]);
+        node.status({ fill: 'red', shape: 'dot', text: error });
+        done(error);
+        return;
       }
     });
   }

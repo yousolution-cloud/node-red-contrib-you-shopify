@@ -9,6 +9,12 @@
         objectId: {value: 'objectId'},
         getParams: {value: 'params={};'},
         foreignKeys: {value: 'foreignKeys'},
+        objectWithoutId: {value: [
+          'asset',
+          'checkout',
+          'productListing',
+          'shop'
+        ]},
         objectWithoutParams: {value: [
           'carrierService',
           'checkout',
@@ -54,7 +60,7 @@
         ]}
       },
       inputs:1,
-      outputs:2,
+      outputs:1,
       outputLabels: ['output','error'],
       icon: "font-awesome/fa-cube",
       label: function() {
@@ -86,12 +92,22 @@
         
         jQuery("#node-input-object").change(function() {
           const valueSelected = jQuery(this).val();
-          // remove if not have params// remove if not have params
+
+          // remove if not have objectId
+          if (self.objectWithoutId.includes(valueSelected)) {
+            // console.log('hide')
+            jQuery('#content-objectId').hide();   
+          } else {
+            // console.log('show')
+            jQuery('#content-objectId').show(); 
+          }
+
+          // remove if not have params
           if (self.objectWithoutParams.includes(valueSelected)) {
-            console.log('hide')
+            // console.log('hide')
             jQuery('#content-params').hide();   
           } else {
-            console.log('show')
+            // console.log('show')
             jQuery('#content-params').show(); 
           }
 
@@ -190,7 +206,7 @@
     </select>
   </div>
 
-  <div class="form-row">
+  <div class="form-row" id="content-objectId">
     <label for="node-input-type"><i class="fa fa-key"></i> Object id</label>
     <input type="text" id="node-input-objectId">
     <input type="hidden" id="node-input-objectId-type">
@@ -229,12 +245,6 @@
                <dl class="message-properties">
                    <dt>payload <span class="property-type">string</span></dt>
                    <dd>the standard output of the command.</dd>
-               </dl>
-           </li>
-           <li>Standard error
-               <dl class="message-properties">
-                   <dt>error <span class="property-type">string</span></dt>
-                   <dd>the standard error of the command.</dd>
                </dl>
            </li>
        </ol>
