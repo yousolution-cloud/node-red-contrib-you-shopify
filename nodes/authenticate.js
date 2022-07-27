@@ -9,11 +9,20 @@ module.exports = function (RED) {
 
     // let shopify;
     try {
-      this.shopify = new Shopify({
-        shopName: config.shopName,
-        apiKey: this.credentials.apiKey,
-        password: this.credentials.password,
-      });
+      if (config.appType === 'private') {
+        this.shopify = new Shopify({
+          shopName: config.shopName,
+          apiKey: this.credentials.apiKey,
+          password: this.credentials.password,
+        });
+
+      } else {
+        this.shopify = new Shopify({
+          shopName: config.shopName,
+          accessToken: this.credentials.accessToken,
+        });
+
+      }
 
       // console.log(await shopify.callLimits());
     } catch (error) {
@@ -43,7 +52,13 @@ module.exports = function (RED) {
         // }
       }
       // try {
-      if (!node.credentials.apiKey || !node.credentials.password) {
+        if (config.appType === 'private' && (!node.credentials.apiKey || !node.credentials.password)) {
+        node.status({ fill: 'red', shape: 'dot', text: 'Missing credentials' });
+        done(new Error('Missing credentials'));
+        return;
+      }
+
+      if (config.appType === 'custom' && !node.credentials.accessToken) {
         node.status({ fill: 'red', shape: 'dot', text: 'Missing credentials' });
         done(new Error('Missing credentials'));
         return;
@@ -65,6 +80,7 @@ module.exports = function (RED) {
     credentials: {
       apiKey: { type: 'password' },
       password: { type: 'password' },
+      accessToken: { type: 'password' },
     },
   });
 };

@@ -31,7 +31,7 @@ describe('authenticate Node', () => {
 
   it('should no have credentials', (done) => {
     const flow = [
-      { id: 'n1', type: 'authenticate', name: 'authenticate', wires: [['n2']] },
+      { id: 'n1', type: 'authenticate', name: 'authenticate', appType: 'private', wires: [['n2']] },
       // { id: 'n2', type: 'helper' },
     ];
     helper.load(authenticate, flow, () => {

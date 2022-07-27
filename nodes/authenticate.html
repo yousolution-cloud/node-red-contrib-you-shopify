@@ -4,11 +4,13 @@
       color: '#66b51b',
       defaults: {
           name: {value: ''},
-          shopName: {value: ''}
+          shopName: {value: ''},
+          appType: {value: 'private'}
       },
       credentials: {
         apiKey: {type:"password"},
-        password: {type:"password"}
+        password: {type:"password"},
+        accessToken: {type:"password"}
       },
       inputs:1,
       outputs:1,
@@ -16,6 +18,22 @@
       icon: 'font-awesome/fa-lock',
       label: function() {
           return this.name||"Shopify authenticate";
+      },
+      oneditprepare: function() {
+
+        jQuery("#node-input-appType").change(function() {
+          const valueSelected = jQuery(this).val();
+
+          if (valueSelected === 'private') {
+            jQuery('#apiKey-row').show();
+            jQuery('#password-row').show();
+            jQuery('#accessToken-row').hide();
+          } else {
+            jQuery('#apiKey-row').hide();
+            jQuery('#password-row').hide();
+            jQuery('#accessToken-row').show();
+          }
+        })
       }
   });
 </script>
@@ -30,19 +48,30 @@
     <input type="text" id="node-input-shopName" placeholder="shopName">
   </div>
   <div class="form-row">
+    <label for="node-input-appType"><i class="fa fa-tag"></i> appType</label>
+    <select name="node-input-appType" id="node-input-appType">
+      <option value="private">Private apps</option>
+      <option value="custom">Custom apps</option>
+    </select>
+  </div>
+  <div class="form-row" id="apiKey-row">
     <label for="node-input-apiKey"><i class="fa fa-lock"></i> apiKey</label>
     <input type="password" id="node-input-apiKey" placeholder="apiKey">
   </div>
-  <div class="form-row">
+  <div class="form-row" id="password-row">
     <label for="node-input-password"><i class="fa fa-lock"></i> password</label>
     <input type="password" id="node-input-password" placeholder="password">
+  </div>
+  <div class="form-row" id="accessToken-row">
+    <label for="node-input-accessToken"><i class="fa fa-lock"></i> accessToken</label>
+    <input type="password" id="node-input-accessToken" placeholder="accessToken">
   </div>
 </script>
 
 <!-- Documentation -->
 <script type="text/html" data-help-name="authenticate">
   <p>Shopify authenticate action</p>
-  
+
   <h3>Inputs</h3>
       <dl class="message-properties">
           <dt>shopName
@@ -52,13 +81,17 @@
           <dt>api key
             <span class="property-type">number | string</span>
           </dt>
-          <dd> the api key for the shop account </dd>
+          <dd> the api key for the shop account in private apps </dd>
           <dt>password
             <span class="property-type">number | string</span>
           </dt>
-          <dd> the password for the shop account </dd>
+          <dd> the password for the shop account in private apps </dd>
+          <dt>access token
+            <span class="property-type">number | string</span>
+          </dt>
+          <dd> the admin API access token for custom apps </dd>
       </dl>
-  
+
    <h3>Outputs</h3>
        <ol class="node-ports">
            <li>Standard output
@@ -74,7 +107,7 @@
                </dl>
            </li>
        </ol>
-  
+
   <h3>Details</h3>
       <p>this node is used for retreive the object from shopify.
         Show the examples for understand how to use it.
@@ -86,7 +119,7 @@
       by <code>msg.topic</code>.</p>
       <p>Likewise the QoS and retain values can be configured in the node or, if left
       blank, set by <code>msg.qos</code> and <code>msg.retain</code> respectively.</p> -->
-  
+
   <h3>References</h3>
       <ul>
           <li><a href="https://shopify.dev/api/admin-rest" target="_black">Shopify API docs</a> - for more details </li>
