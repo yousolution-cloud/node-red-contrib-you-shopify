@@ -1,23 +1,56 @@
 const Shopify = require('shopify-api-node');
 
 module.exports = function (RED) {
-  function AuthenticateNode(config) {
-    RED.nodes.createNode(this, config);
+  function AuthenticateConfigNode(n) {
+    RED.nodes.createNode(this, n);
 
-    // const flowContext = this.context().flow;
-    // const nodeContext = this.context();
+    this.options = {
+      name: n.name || 'Authenticate',
+      shopName: n.shopName,
+      accessToken: this.credentials.accessToken,
+      apiKey: this.credentials.apiKey,
+      password: this.credentials.password,
+    };
+  }
 
-    // let shopify;
+  RED.nodes.registerType('authenticateConfig', AuthenticateConfigNode, {
+    credentials: {
+      accessToken: { type: 'password' },
+      apiKey: { type: 'password' },
+      password: { type: 'password' },
+    },
+  });
+
+  function AuthenticateNode(n) {
+    RED.nodes.createNode(this, n);
+
+    this.authenticateConfig = RED.nodes.getNode(n.authenticateConfig);
+
+    const shopName = this.authenticateConfig.options.shopName;
+    const accessToken = this.authenticateConfig.options.accessToken;
+    const apiKey = this.authenticateConfig.options.apiKey;
+    const password = this.authenticateConfig.options.password;
+
     try {
-      this.shopify = new Shopify({
-        shopName: config.shopName,
-        apiKey: this.credentials.apiKey,
-        password: this.credentials.password,
-      });
-
       // console.log(await shopify.callLimits());
+
+      if (accessToken) {
+        this.shopify = new Shopify({
+          shopName,
+          accessToken,
+        });
+      }
+
+      if (apiKey) {
+        this.shopify = new Shopify({
+          shopName,
+          apiKey,
+          password,
+        });
+      }
     } catch (error) {
-      // this.error(error);
+      console.log(error);
+      this.error(error);
       this.status({ fill: 'gray', shape: 'ring', text: 'Set credentials' });
     }
     if (this.shopify) {
@@ -43,7 +76,7 @@ module.exports = function (RED) {
         // }
       }
       // try {
-      if (!node.credentials.apiKey || !node.credentials.password) {
+      if (!accessToken && !apiKey) {
         node.status({ fill: 'red', shape: 'dot', text: 'Missing credentials' });
         done(new Error('Missing credentials'));
         return;

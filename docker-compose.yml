@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   nodered:
-    image: nodered/node-red:2.0.6-12
+    image: nodered/node-red:3.1.9-18
     # network_mode: host
     volumes:
       - ./data:/data

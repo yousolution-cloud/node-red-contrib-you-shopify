@@ -1,95 +1,144 @@
+<script type="text/x-red" data-template-name="authenticateConfig">
+  <div class="form-row">
+    <label for="node-config-input-name"><i class="fa fa-bookmark"></i> name</label>
+    <input type="text" id="node-config-input-name" placeholder="tunnel name" />
+  </div>
+
+  <div class="form-row">
+    <label for="node-config-input-shopName"><i class="fa fa-tag"></i> shopName</label>
+    <input type="text" id="node-config-input-shopName" placeholder="shopName" />
+  </div>
+  <div class="form-row">
+    <label for="node-config-input-accessToken"><i class="fa fa-lock"></i> accessToken</label>
+    <input type="password" id="node-config-input-accessToken" placeholder="accessToken" />
+  </div>
+  <div class="form-row">
+    <label for="node-config-input-apiKey"><i class="fa fa-lock"></i> apiKey</label>
+    <input type="password" id="node-config-input-apiKey" placeholder="apiKey" />
+  </div>
+  <div class="form-row">
+    <label for="node-config-input-password"><i class="fa fa-lock"></i> password</label>
+    <input type="password" id="node-config-input-password" placeholder="password" />
+  </div>
+</script>
+
 <script type="text/javascript">
-  RED.nodes.registerType('authenticate',{
-      category: 'Shopify',
-      color: '#66b51b',
-      defaults: {
-          name: {value: ''},
-          shopName: {value: ''}
-      },
-      credentials: {
-        apiKey: {type:"password"},
-        password: {type:"password"}
-      },
-      inputs:1,
-      outputs:1,
-      outputLabels: ['output'],
-      icon: 'font-awesome/fa-lock',
-      label: function() {
-          return this.name||"Shopify authenticate";
-      }
+  RED.nodes.registerType('authenticateConfig', {
+    category: 'config',
+    color: '#AAAA66',
+    defaults: {
+      name: { value: '', required: true },
+      shopName: { value: '', required: true },
+    },
+    credentials: {
+      accessToken: { type: 'password' },
+      apiKey: { type: 'password' },
+      password: { type: 'password' },
+    },
+    label: function () {
+      return this.name;
+    },
+    oneditprepare: function () {
+      // const sshKeyFileIn = document.getElementById('node-config-input-ssh-key-in');
+      // const sshKeyFile = document.getElementById('node-config-input-sshkey');
+      // if (document.getElementById('node-config-input-sshkey').value) {
+      //   $('#node-config-input-selected-sshkey').prop('checked', true);
+      // }
+      // sshKeyFileIn.addEventListener('change', function () {
+      //   const fileReader = new FileReader();
+      //   fileReader.onload = function () {
+      //     // console.log(fileReader.result);
+      //     sshKeyFile.value = fileReader.result;
+      //   };
+      //   fileReader.readAsBinaryString(this.files[0]);
+      // });
+    },
+  });
+</script>
+
+<script type="text/javascript">
+  RED.nodes.registerType('authenticate', {
+    category: 'Shopify',
+    color: '#66b51b',
+    defaults: {
+      authenticateConfig: { type: 'authenticateConfig', required: true },
+      name: { value: '' },
+    },
+    inputs: 1,
+    outputs: 1,
+    outputLabels: ['output'],
+    icon: 'font-awesome/fa-lock',
+    label: function () {
+      return this.name || 'Shopify authenticate';
+    },
   });
 </script>
 
 <script type="text/html" data-template-name="authenticate">
   <div class="form-row">
-      <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-      <input type="text" id="node-input-name" placeholder="Name">
+    <label for="node-input-wstunnnel"><i class="fa fa-gears"></i> Cofigure Shopify</label>
+    <input type="text" id="node-input-authenticateConfig" />
   </div>
   <div class="form-row">
-    <label for="node-input-shopName"><i class="fa fa-tag"></i> shopName</label>
-    <input type="text" id="node-input-shopName" placeholder="shopName">
-  </div>
-  <div class="form-row">
-    <label for="node-input-apiKey"><i class="fa fa-lock"></i> apiKey</label>
-    <input type="password" id="node-input-apiKey" placeholder="apiKey">
-  </div>
-  <div class="form-row">
-    <label for="node-input-password"><i class="fa fa-lock"></i> password</label>
-    <input type="password" id="node-input-password" placeholder="password">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name" />
   </div>
 </script>
 
 <!-- Documentation -->
 <script type="text/html" data-help-name="authenticate">
   <p>Shopify authenticate action</p>
-  
+
   <h3>Inputs</h3>
+  <dl class="message-properties">
+    <dt>
+      shopName
+      <span class="property-type">string</span>
+    </dt>
+    <dd>the shop's name</dd>
+    <dt>
+      api key
+      <span class="property-type">number | string</span>
+    </dt>
+    <dd>the api key for the shop account</dd>
+    <dt>
+      password
+      <span class="property-type">number | string</span>
+    </dt>
+    <dd>the password for the shop account</dd>
+  </dl>
+
+  <h3>Outputs</h3>
+  <ol class="node-ports">
+    <li>
+      Standard output
       <dl class="message-properties">
-          <dt>shopName
-              <span class="property-type">string</span>
-          </dt>
-          <dd> the shop's name </dd>
-          <dt>api key
-            <span class="property-type">number | string</span>
-          </dt>
-          <dd> the api key for the shop account </dd>
-          <dt>password
-            <span class="property-type">number | string</span>
-          </dt>
-          <dd> the password for the shop account </dd>
+        <dt>payload <span class="property-type">string</span></dt>
+        <dd>the standard output of the command.</dd>
       </dl>
-  
-   <h3>Outputs</h3>
-       <ol class="node-ports">
-           <li>Standard output
-               <dl class="message-properties">
-                   <dt>payload <span class="property-type">string</span></dt>
-                   <dd>the standard output of the command.</dd>
-               </dl>
-           </li>
-           <li>Standard error
-               <dl class="message-properties">
-                   <dt>error <span class="property-type">string</span></dt>
-                   <dd>the standard error of the command.</dd>
-               </dl>
-           </li>
-       </ol>
-  
+    </li>
+    <li>
+      Standard error
+      <dl class="message-properties">
+        <dt>error <span class="property-type">string</span></dt>
+        <dd>the standard error of the command.</dd>
+      </dl>
+    </li>
+  </ol>
+
   <h3>Details</h3>
-      <p>this node is used for retreive the object from shopify.
-        Show the examples for understand how to use it.
-      </p>
-      <!-- <p><code>msg.payload</code> is used as the payload of the published message.
+  <p>this node is used for retreive the object from shopify. Show the examples for understand how to use it.</p>
+  <!-- <p><code>msg.payload</code> is used as the payload of the published message.
       If it contains an Object it will be converted to a JSON string before being sent.
       If it contains a binary Buffer the message will be published as-is.</p>
       <p>The topic used can be configured in the node or, if left blank, can be set
       by <code>msg.topic</code>.</p>
       <p>Likewise the QoS and retain values can be configured in the node or, if left
       blank, set by <code>msg.qos</code> and <code>msg.retain</code> respectively.</p> -->
-  
+
   <h3>References</h3>
-      <ul>
-          <li><a href="https://shopify.dev/api/admin-rest" target="_black">Shopify API docs</a> - for more details </li>
-          <li><a>GitHub</a> - the nodes github repository</li>
-      </ul>
+  <ul>
+    <li><a href="https://shopify.dev/api/admin-rest" target="_black">Shopify API docs</a> - for more details</li>
+    <li><a>GitHub</a> - the nodes github repository</li>
+  </ul>
 </script>
